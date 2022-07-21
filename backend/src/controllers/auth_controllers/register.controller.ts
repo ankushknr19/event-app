@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
-import { userModel } from '../models/user.model'
+import { userModel } from '../../models/user.model'
 import bcrypt from 'bcrypt'
 import _ from 'lodash'
 // @desc register a new user
 // @route POST /api/users
 // @access public
 
-export const userRegister = async (req: Request, res: Response) => {
+export const userRegisterController = async (req: Request, res: Response) => {
 	try {
 		//get data from req.body and validate it
 

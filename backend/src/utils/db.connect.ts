@@ -3,13 +3,14 @@ import dotenv from 'dotenv'
 dotenv.config()
 const { mongoCompassURI } = process.env
 
-export async function connectDB() {
+export function connectDB() {
 	try {
 		const dbURI: string = mongoCompassURI || ''
-		await mongoose.connect(dbURI)
+		mongoose.connect(dbURI, () =>
+			console.log('Database connected successfully!')
+		)
 	} catch (error) {
 		console.log('error during inital connection to mongodb database')
 	}
-
 	mongoose.set('debug', true)
 }

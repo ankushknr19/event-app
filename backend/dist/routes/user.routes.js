@@ -4,11 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const user_controller_1 = require("../controllers/user.controller");
-const validateResource_1 = require("../middlewares/validateResource");
-const user_schema_1 = require("../schemas/user.schema");
+const requireUser_1 = require("../middlewares/requireUser");
 const router = express_1.default.Router();
-router.route('/').get((_req, res) => res.send('hello user'));
-router.route('/').post((0, validateResource_1.validate)(user_schema_1.createUserSchema), user_controller_1.userRegister);
+router.route('/profile').get(requireUser_1.requireUser, (_req, res) => {
+    res.send('profile route is working...');
+});
 exports.default = router;
 //# sourceMappingURL=user.routes.js.map
