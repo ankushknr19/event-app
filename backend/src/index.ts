@@ -1,17 +1,17 @@
 import dotenv from 'dotenv'
 import express from 'express'
 import helmet from 'helmet'
+import cookieParser from 'cookie-parser'
 import { connectDB } from './utils/db.connect'
 import authRoutes from './routes/auth.routes'
 import userRoutes from './routes/user.routes'
-import { deserializeUser } from './middlewares/deserializeUser'
 
 dotenv.config()
 const app = express()
 
 app.use(express.json())
 app.use(helmet())
-app.use(deserializeUser)
+app.use(cookieParser())
 
 connectDB()
 

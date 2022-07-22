@@ -28,6 +28,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const userSchema = new mongoose_1.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    refreshTokenId: { type: String },
 }, { timestamps: true });
 exports.userModel = mongoose_1.default.model('User', userSchema);
 //# sourceMappingURL=user.model.js.map

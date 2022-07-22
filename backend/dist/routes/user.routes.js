@@ -4,10 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const requireUser_1 = require("../middlewares/requireUser");
+const verifyUser_1 = require("../middlewares/verifyUser");
 const router = express_1.default.Router();
-router.route('/profile').get(requireUser_1.requireUser, (_req, res) => {
-    res.send('profile route is working...');
+router.route('/profile').get(verifyUser_1.verifyUser, (_req, res) => {
+    var _a;
+    res.send(`welcome user ${(_a = res.locals.user) === null || _a === void 0 ? void 0 : _a.userId}`);
 });
 exports.default = router;
 //# sourceMappingURL=user.routes.js.map

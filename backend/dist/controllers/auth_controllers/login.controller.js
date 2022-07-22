@@ -13,9 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userLoginController = void 0;
+const dotenv_1 = __importDefault(require("dotenv"));
 const user_model_1 = require("../../models/user.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const jwt_utils_1 = require("../../utils/jwt.utils");
+const sign_jwt_utils_1 = require("../../utils/jwt_utils/sign.jwt.utils");
+dotenv_1.default.config();
 const userLoginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
@@ -27,17 +29,13 @@ const userLoginController = (req, res) => __awaiter(void 0, void 0, void 0, func
         if (!isValidPassword) {
             throw new Error('invalid password');
         }
-        const accessToken = (0, jwt_utils_1.signJwt)({ userId: user._id }, { expiresIn: process.env.accessTokenTimeToLive });
-        res.cookie(user._id.toString(), accessToken, {
-            path: '/',
-            expires: new Date(Date.now() + 1000 * 30),
-            httpOnly: true,
-            sameSite: 'lax',
-        });
+        (0, sign_jwt_utils_1.signJwtAccessToken)(res, { userId: user._id });
+        const { refreshTokenId } = (0, sign_jwt_utils_1.signJwtRefreshToken)(res, user._id);
+        user.refreshTokenId = refreshTokenId;
+        yield user.save();
         res.status(200).send({
             message: 'Sucessfully logged in',
             user: user._id,
-            accessToken,
         });
     }
     catch (error) {
