@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import { connectDB } from './utils/db.connect'
 import authRoutes from './routes/auth.routes'
 import userRoutes from './routes/user.routes'
+import { limiter } from './middlewares/rateLimit'
 
 dotenv.config()
 const app = express()
@@ -12,6 +13,7 @@ const app = express()
 app.use(express.json())
 app.use(helmet())
 app.use(cookieParser())
+app.use(limiter)
 
 connectDB()
 
