@@ -10,6 +10,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const db_connect_1 = require("./utils/db.connect");
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 const user_routes_1 = __importDefault(require("./routes/user.routes"));
+const event_routes_1 = __importDefault(require("./routes/event.routes"));
 const rateLimit_1 = require("./middlewares/rateLimit");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -20,6 +21,7 @@ app.use(rateLimit_1.limiter);
 (0, db_connect_1.connectDB)();
 app.use('/api/auth', auth_routes_1.default);
 app.use('/api/me', user_routes_1.default);
+app.use('/api/events', event_routes_1.default);
 app.get('/', (_req, res) => {
     res.send('api is running...');
 });

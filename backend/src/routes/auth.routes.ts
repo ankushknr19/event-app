@@ -3,17 +3,19 @@ import { userLoginController } from '../controllers/auth_controllers/login.contr
 import { userLoginSchema } from '../schemas/auth_schemas/login.schema'
 import { userRegisterController } from '../controllers/auth_controllers/register.controller'
 import { userRegisterSchema } from '../schemas/auth_schemas/register.schema'
-import { validate } from '../middlewares/validateResource'
-import { verifyUser } from '../middlewares/verifyUser'
+import { validateResource } from '../middlewares/validateResource'
+import { requireUser } from '../middlewares/requireUser'
 import { userLogoutController } from '../controllers/auth_controllers/logout.controller'
 
 const router = express.Router()
 
-router.route('/login').post(validate(userLoginSchema), userLoginController)
+router
+	.route('/login')
+	.post(validateResource(userLoginSchema), userLoginController)
 router
 	.route('/register')
-	.post(validate(userRegisterSchema), userRegisterController)
+	.post(validateResource(userRegisterSchema), userRegisterController)
 
-router.route('/logout').get(verifyUser, userLogoutController)
+router.route('/logout').get(requireUser, userLogoutController)
 
 export default router

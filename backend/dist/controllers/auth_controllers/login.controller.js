@@ -21,7 +21,7 @@ dotenv_1.default.config();
 const userLoginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
-        const user = yield user_model_1.userModel.findOne({ email });
+        const user = yield user_model_1.UserModel.findOne({ email });
         if (!user) {
             throw new Error('invalid email');
         }
@@ -29,13 +29,14 @@ const userLoginController = (req, res) => __awaiter(void 0, void 0, void 0, func
         if (!isValidPassword) {
             throw new Error('invalid password');
         }
-        (0, sign_jwt_utils_1.signJwtAccessToken)(res, { userId: user._id });
+        (0, sign_jwt_utils_1.signJwtAccessToken)(res, { userId: user._id, user_type: user.user_type });
         const { refreshTokenId } = (0, sign_jwt_utils_1.signJwtRefreshToken)(res, user._id);
         user.refreshTokenId = refreshTokenId;
         yield user.save();
         res.status(200).send({
             message: 'Sucessfully logged in',
             user: user._id,
+            user_type: user.user_type,
         });
     }
     catch (error) {

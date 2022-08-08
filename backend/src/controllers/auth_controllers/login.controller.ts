@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import { userModel } from '../../models/user.model'
+import { UserModel } from '../../models/user.model'
 import bcrypt from 'bcrypt'
 import {
 	signJwtAccessToken,
@@ -15,7 +15,7 @@ export const userLoginController = async (req: Request, res: Response) => {
 		const { email, password } = req.body
 
 		//find user using email
-		const user = await userModel.findOne({ email })
+		const user = await UserModel.findOne({ email })
 		if (!user) {
 			throw new Error('invalid email')
 		}
@@ -26,7 +26,7 @@ export const userLoginController = async (req: Request, res: Response) => {
 		}
 
 		//sign access token
-		signJwtAccessToken(res, { userId: user._id })
+		signJwtAccessToken(res, { userId: user._id, user_type: user.user_type })
 
 		//sign refresh token
 		const { refreshTokenId } = signJwtRefreshToken(res, user._id)
@@ -38,6 +38,7 @@ export const userLoginController = async (req: Request, res: Response) => {
 		res.status(200).send({
 			message: 'Sucessfully logged in',
 			user: user._id,
+			user_type: user.user_type,
 		})
 	} catch (error: any) {
 		res.status(404).send(error.message)

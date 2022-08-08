@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express'
 import { verifyAccessToken } from '../utils/jwt_utils/verify.jwt.utils'
 import { reissueTokens } from '../utils/jwt_utils/reissue.jwt.utils'
 
-export const verifyUser = async (
+export const requireUser = async (
 	req: Request,
 	res: Response,
 	next: NextFunction

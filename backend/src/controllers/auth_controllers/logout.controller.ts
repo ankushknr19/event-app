@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
-import { userModel } from '../../models/user.model'
+import { UserModel } from '../../models/user.model'
 
 export const userLogoutController = async (_req: Request, res: Response) => {
 	try {
 		const userId = res.locals.user.userId
-		const user = await userModel.findById(userId)
+		const user = await UserModel.findById(userId)
 
 		if (!user) throw new Error()
 
-		await userModel.updateOne(
+		await UserModel.updateOne(
 			{ _id: userId },
 			{ $unset: { refreshTokenId: '' } }
 		)

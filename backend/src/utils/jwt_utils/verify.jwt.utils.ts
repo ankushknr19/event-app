@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import { get } from 'lodash'
-import { userModel } from '../../models/user.model'
+import { UserModel } from '../../models/user.model'
 
 dotenv.config()
 
@@ -31,9 +31,9 @@ export const verifyRefreshToken = async (token: string) => {
 		const decoded = jwt.verify(token, process.env.refreshTokenSecretKey!)
 
 		//get refreshTokenId from database
-		const dbSearch = await userModel
-			.findById(get(decoded, 'userId'))
-			.select('refreshTokenId')
+		const dbSearch = await UserModel.findById(get(decoded, 'userId')).select(
+			'refreshTokenId'
+		)
 
 		if (!dbSearch) {
 			throw new Error()

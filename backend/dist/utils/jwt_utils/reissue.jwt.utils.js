@@ -20,11 +20,14 @@ const reissueTokens = (res, refreshToken) => __awaiter(void 0, void 0, void 0, f
         if (!decoded || !(0, lodash_1.get)(decoded, 'userId') || expired) {
             throw new Error();
         }
-        const user = yield user_model_1.userModel.findById((0, lodash_1.get)(decoded, 'userId'));
+        const user = yield user_model_1.UserModel.findById((0, lodash_1.get)(decoded, 'userId'));
         if (!user) {
             throw new Error();
         }
-        const newAccessToken = (0, sign_jwt_utils_1.signJwtAccessToken)(res, { userId: user._id });
+        const newAccessToken = (0, sign_jwt_utils_1.signJwtAccessToken)(res, {
+            userId: user._id,
+            user_type: user.user_type,
+        });
         const { refreshToken: newRefreshToken, refreshTokenId } = (0, sign_jwt_utils_1.signJwtRefreshToken)(res, user._id);
         user.refreshTokenId = refreshTokenId;
         yield user.save();

@@ -14,10 +14,10 @@ const user_model_1 = require("../../models/user.model");
 const userLogoutController = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = res.locals.user.userId;
-        const user = yield user_model_1.userModel.findById(userId);
+        const user = yield user_model_1.UserModel.findById(userId);
         if (!user)
             throw new Error();
-        yield user_model_1.userModel.updateOne({ _id: userId }, { $unset: { refreshTokenId: '' } });
+        yield user_model_1.UserModel.updateOne({ _id: userId }, { $unset: { refreshTokenId: '' } });
         res.clearCookie('accessToken', { path: '/', httpOnly: true });
         res.clearCookie('refreshToken', { path: '/', httpOnly: true });
         res.status(200).send('logged out successfully');

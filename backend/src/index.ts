@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import { connectDB } from './utils/db.connect'
 import authRoutes from './routes/auth.routes'
 import userRoutes from './routes/user.routes'
+import eventRoutes from './routes/event.routes'
 import { limiter } from './middlewares/rateLimit'
 
 dotenv.config()
@@ -19,6 +20,7 @@ connectDB()
 
 app.use('/api/auth', authRoutes)
 app.use('/api/me', userRoutes)
+app.use('/api/events', eventRoutes)
 
 app.get('/', (_req, res) => {
 	res.send('api is running...')

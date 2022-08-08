@@ -11,6 +11,7 @@ export const userRegisterSchema = z.object({
 			.string({
 				required_error: 'Password is required',
 			})
-			.min(6, 'assword should be of at least 6 characters'),
+			.min(6, 'Password should be of at least 6 characters'),
+		user_type: z.enum(['user', 'organizer', 'admin']),
 	}),
 })

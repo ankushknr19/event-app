@@ -13,7 +13,8 @@ exports.userRegisterSchema = zod_1.z.object({
             .string({
             required_error: 'Password is required',
         })
-            .min(6, 'assword should be of at least 6 characters'),
+            .min(6, 'Password should be of at least 6 characters'),
+        user_type: zod_1.z.enum(['user', 'organizer', 'admin']),
     }),
 });
 //# sourceMappingURL=register.schema.js.map

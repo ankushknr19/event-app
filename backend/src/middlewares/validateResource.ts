@@ -5,7 +5,7 @@ import { AnyZodObject } from 'zod'
 // a schema in the middleware and then it is going
 // to validate the request against that schema
 
-export const validate =
+export const validateResource =
 	(schema: AnyZodObject) =>
 	async (req: Request, res: Response, next: NextFunction) => {
 		try {

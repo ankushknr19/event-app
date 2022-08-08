@@ -23,18 +23,29 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserModel = void 0;
+exports.EventModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const userSchema = new mongoose_1.Schema({
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    user_type: {
-        type: String,
-        enum: ['user', 'organizer', 'admin'],
-        default: 'user',
-        required: true,
+const eventSchema = new mongoose_1.Schema({
+    user: { type: mongoose_1.default.Types.ObjectId, ref: 'User', required: true },
+    name: { type: String, required: true },
+    organizer: { type: String, required: true },
+    category: { type: String, required: true },
+    event_type: { type: String, required: true },
+    venue: { type: String, required: true },
+    location: { type: String, required: true },
+    start_date: { type: Date, required: true },
+    end_date: Date,
+    time: String,
+    description: String,
+    tags: [{ type: String, lowercase: true }],
+    ticket: {
+        type: { type: String, enum: ['paid', 'free'], required: true },
+        price: { type: Number, required: true },
     },
-    refreshTokenId: { type: String },
+    image: { type: String },
+    contact: [{ type: Number }],
+    created: { type: Date, default: new Date() },
+    isActive: { type: Boolean, default: true },
 }, { timestamps: true });
-exports.UserModel = mongoose_1.default.model('User', userSchema);
-//# sourceMappingURL=user.model.js.map
+exports.EventModel = mongoose_1.default.model('Event', eventSchema);
+//# sourceMappingURL=event.model.js.map

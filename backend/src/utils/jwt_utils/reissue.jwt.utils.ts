@@ -1,6 +1,6 @@
 import { Response } from 'express'
 import { get } from 'lodash'
-import { userModel } from '../../models/user.model'
+import { UserModel } from '../../models/user.model'
 import { signJwtAccessToken, signJwtRefreshToken } from './sign.jwt.utils'
 import { verifyRefreshToken } from './verify.jwt.utils'
 
@@ -14,14 +14,17 @@ export const reissueTokens = async (res: Response, refreshToken: string) => {
 		}
 
 		//find user
-		const user = await userModel.findById(get(decoded, 'userId'))
+		const user = await UserModel.findById(get(decoded, 'userId'))
 
 		if (!user) {
 			throw new Error()
 		}
 
 		//sign new tokens
-		const newAccessToken = signJwtAccessToken(res, { userId: user._id })
+		const newAccessToken = signJwtAccessToken(res, {
+			userId: user._id,
+			user_type: user.user_type,
+		})
 		const { refreshToken: newRefreshToken, refreshTokenId } =
 			signJwtRefreshToken(res, user._id)
 

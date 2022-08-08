@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import { userModel } from '../../models/user.model'
+import { UserModel } from '../../models/user.model'
 import bcrypt from 'bcrypt'
 import _ from 'lodash'
 
@@ -16,9 +16,10 @@ export const userRegisterController = async (req: Request, res: Response) => {
 
 		//the request object is already validated before coming here
 		//using validate middleware in routes
-		const { email, password } = req.body
+		const { email, password, user_type } = req.body
+
 		//check if email exists
-		const checkDB = await userModel.findOne({ email }).select('email')
+		const checkDB = await UserModel.findOne({ email }).select('email')
 		if (checkDB) {
 			throw new Error('email already exists')
 		}
@@ -29,9 +30,10 @@ export const userRegisterController = async (req: Request, res: Response) => {
 		const hashedPassword = bcrypt.hashSync(password, salt)
 
 		//save in database
-		const newUser = await userModel.create({
+		const newUser = await UserModel.create({
 			email,
 			password: hashedPassword,
+			user_type,
 		})
 
 		//send the response but omit the password

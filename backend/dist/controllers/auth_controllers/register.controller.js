@@ -20,17 +20,18 @@ const lodash_1 = __importDefault(require("lodash"));
 dotenv_1.default.config();
 const userRegisterController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { email, password } = req.body;
-        const checkDB = yield user_model_1.userModel.findOne({ email }).select('email');
+        const { email, password, user_type } = req.body;
+        const checkDB = yield user_model_1.UserModel.findOne({ email }).select('email');
         if (checkDB) {
             throw new Error('email already exists');
         }
         const saltRound = parseInt(process.env.SALT_ROUND);
         const salt = yield bcrypt_1.default.genSalt(saltRound);
         const hashedPassword = bcrypt_1.default.hashSync(password, salt);
-        const newUser = yield user_model_1.userModel.create({
+        const newUser = yield user_model_1.UserModel.create({
             email,
             password: hashedPassword,
+            user_type,
         });
         res.status(200).json(lodash_1.default.omit(newUser.toJSON(), 'password'));
     }

@@ -39,9 +39,7 @@ exports.verifyAccessToken = verifyAccessToken;
 const verifyRefreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const decoded = jsonwebtoken_1.default.verify(token, process.env.refreshTokenSecretKey);
-        const dbSearch = yield user_model_1.userModel
-            .findById((0, lodash_1.get)(decoded, 'userId'))
-            .select('refreshTokenId');
+        const dbSearch = yield user_model_1.UserModel.findById((0, lodash_1.get)(decoded, 'userId')).select('refreshTokenId');
         if (!dbSearch) {
             throw new Error();
         }
