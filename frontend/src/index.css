@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+#root {
+	--clr-primary-100: #707793;
+	--clr-primary-200: #43455c;
+	--clr-primary-300: #3c3f58;
+	--clr-primary-400: #2e3047;
+	--clr-secondary-200: rgb(179, 149, 149);
+	--clr-secondary-400: rgb(154, 128, 128);
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font: inherit;
+	font-family: Montserrat, sans-serif;
+}
+
+/* Make images easier to work with */
+img,
+picture,
+svg {
+	max-width: 100%;
+	display: block;
+}
+
+a,
+a::before,
+a::after {
+	text-decoration: none;
+	color: inherit;
+}

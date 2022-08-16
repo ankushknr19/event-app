@@ -1,0 +1,31 @@
+.main-header {
+	width: 100%;
+	top: 0;
+	display: grid;
+	place-items: center;
+	margin-bottom: 60px;
+}
+
+.main-header-container {
+	width: 90%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 5px;
+}
+
+.logo {
+	color: var(--clr-primary-400);
+	display: flex;
+	align-items: center;
+	gap: 2px;
+}
+
+.primary-text {
+	font-size: x-large;
+}
+
+.right-section {
+	display: flex;
+	gap: 4px;
+}

@@ -9,13 +9,13 @@ exports.createEventSchema = zod_1.z.object({
             required_error: 'Event name is required',
         })
             .min(3)
-            .max(30),
+            .max(60),
         organizer: zod_1.z
             .string({
             required_error: 'Organizer name is required',
         })
             .min(3)
-            .max(30),
+            .max(60),
         category: zod_1.z.string({
             required_error: 'Event category is required',
         }),
@@ -27,13 +27,13 @@ exports.createEventSchema = zod_1.z.object({
             required_error: 'Venue is required',
         })
             .min(3)
-            .max(30),
+            .max(60),
         location: zod_1.z
             .string({
             required_error: 'Location is required',
         })
             .min(4)
-            .max(100),
+            .max(200),
         start_date: zod_1.z.string({
             required_error: 'Start date is required',
         }),
@@ -41,7 +41,7 @@ exports.createEventSchema = zod_1.z.object({
             required_error: 'End date is required',
         }),
         time: zod_1.z.string().max(30).optional(),
-        description: zod_1.z.string().max(500).optional(),
+        description: zod_1.z.string().max(2000).optional(),
         tags: zod_1.z.array(zod_1.z.string()).optional(),
         ticket_type: zod_1.z.enum(['paid', 'free']),
         ticket_price: zod_1.z.number({

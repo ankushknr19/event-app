@@ -1,0 +1,17 @@
+export const event = {
+	name: 'Monsoon Acoustic Night',
+	organizer: 'Grounds Nepal',
+	category: 'music',
+	event_type: 'live music',
+	venue: 'Grounds Nepal',
+	location: 'Bansbari, Dhapasi Marg',
+	start_date: '2022-07-12',
+	end_date: '2022-07-12',
+	time: '4pm onwards',
+	description: '',
+	tags: ['live', 'Acoustic', 'fun'],
+	ticket_type: 'paid',
+	ticket_price: 500,
+	image: '',
+	contact: [9812323412],
+}

@@ -1,0 +1,26 @@
+.btn {
+	color: white;
+	background-color: black;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+	opacity: 95%;
+}
+
+.btn:hover,
+.btn:active {
+	opacity: 100%;
+}
+
+.btn-secondary {
+	background-color: var(--clr-secondary-400);
+}
+
+.btn-primary {
+	background-color: var(--clr-primary-400);
+}
+
+.btn-rounded {
+	border-radius: 20px;
+}

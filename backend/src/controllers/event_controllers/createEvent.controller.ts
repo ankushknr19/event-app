@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
 import { EventModel } from '../../models/event.model'
 
+//@desc POST create a new event by organizer
+//@route /api/events
+//@access Private
+
 export async function createEventController(req: Request, res: Response) {
 	try {
 		const {
@@ -44,7 +48,7 @@ export async function createEventController(req: Request, res: Response) {
 			contact,
 		})
 
-		res.status(200).send(newEvent)
+		res.status(201).send(newEvent)
 	} catch (error: any) {
 		res.status(404).send(error.message)
 	}

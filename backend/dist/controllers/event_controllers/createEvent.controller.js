@@ -36,7 +36,7 @@ function createEventController(req, res) {
                 image,
                 contact,
             });
-            res.status(200).send(newEvent);
+            res.status(201).send(newEvent);
         }
         catch (error) {
             res.status(404).send(error.message);

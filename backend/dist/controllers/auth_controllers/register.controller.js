@@ -33,7 +33,7 @@ const userRegisterController = (req, res) => __awaiter(void 0, void 0, void 0, f
             password: hashedPassword,
             user_type,
         });
-        res.status(200).json(lodash_1.default.omit(newUser.toJSON(), 'password'));
+        res.status(201).json(lodash_1.default.omit(newUser.toJSON(), 'password'));
     }
     catch (error) {
         res.status(404).send(error.message);

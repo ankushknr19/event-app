@@ -37,7 +37,7 @@ export const userRegisterController = async (req: Request, res: Response) => {
 		})
 
 		//send the response but omit the password
-		res.status(200).json(_.omit(newUser.toJSON(), 'password'))
+		res.status(201).json(_.omit(newUser.toJSON(), 'password'))
 	} catch (error: any) {
 		res.status(404).send(error.message)
 	}
