@@ -1,13 +1,17 @@
-import dotenv from 'dotenv'
 import { Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
+import {
+	ACCESS_TOKEN_SECRET_KEY,
+	ACCESS_TOKEN_TIME_TO_LIVE,
+	REFRESH_TOKEN_SECRET_KEY,
+	REFRESH_TOKEN_TIME_TO_LIVE,
+} from '../../../config/env'
 
-dotenv.config()
 //sign access token
 export const signJwtAccessToken = (res: Response, payload: Object) => {
-	const accessToken = jwt.sign(payload, process.env.accessTokenSecretKey!, {
-		expiresIn: process.env.accessTokenTimeToLive,
+	const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET_KEY!, {
+		expiresIn: ACCESS_TOKEN_TIME_TO_LIVE,
 	})
 
 	//store access token in cookie and send as response
@@ -30,9 +34,9 @@ export const signJwtRefreshToken = (res: Response, userId: any) => {
 			id: refreshTokenId,
 			userId,
 		},
-		process.env.refreshTokenSecretKey!,
+		REFRESH_TOKEN_SECRET_KEY!,
 		{
-			expiresIn: process.env.refreshTokenTimeToLive,
+			expiresIn: REFRESH_TOKEN_TIME_TO_LIVE,
 		}
 	)
 

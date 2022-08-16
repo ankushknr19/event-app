@@ -1,5 +1,5 @@
 import request from 'supertest'
-import app from '../../index'
+import app from '../../../index'
 
 describe('Test GET /events', () => {
 	test('It should respond with 200 success', async () => {

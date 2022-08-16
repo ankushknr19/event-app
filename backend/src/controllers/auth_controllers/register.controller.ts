@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import { UserModel } from '../../models/user.model'
+import { UserModel } from '../../database/models/user.model'
+import { SALT_ROUND } from '../../config/env'
 import bcrypt from 'bcrypt'
 import _ from 'lodash'
 
@@ -25,7 +26,7 @@ export const userRegisterController = async (req: Request, res: Response) => {
 		}
 
 		//encrypt the password
-		const saltRound = parseInt(process.env.SALT_ROUND!)
+		const saltRound = parseInt(SALT_ROUND!)
 		const salt = await bcrypt.genSalt(saltRound)
 		const hashedPassword = bcrypt.hashSync(password, salt)
 

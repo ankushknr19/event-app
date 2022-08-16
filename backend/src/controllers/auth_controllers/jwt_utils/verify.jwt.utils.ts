@@ -1,15 +1,16 @@
-import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import { get } from 'lodash'
-import { UserModel } from '../../models/user.model'
-
-dotenv.config()
+import { UserModel } from '../../../database/models/user.model'
+import {
+	ACCESS_TOKEN_SECRET_KEY,
+	REFRESH_TOKEN_SECRET_KEY,
+} from '../../../config/env'
 
 //verify jwt access token
 export const verifyAccessToken = (token: string) => {
 	try {
 		//decode token
-		const decoded = jwt.verify(token, process.env.accessTokenSecretKey!)
+		const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET_KEY!)
 		return {
 			valid: true,
 			expired: false,
@@ -28,7 +29,7 @@ export const verifyAccessToken = (token: string) => {
 export const verifyRefreshToken = async (token: string) => {
 	try {
 		//decode token
-		const decoded = jwt.verify(token, process.env.refreshTokenSecretKey!)
+		const decoded = jwt.verify(token, REFRESH_TOKEN_SECRET_KEY!)
 
 		//get refreshTokenId from database
 		const dbSearch = await UserModel.findById(get(decoded, 'userId')).select(

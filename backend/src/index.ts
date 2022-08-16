@@ -1,15 +1,14 @@
-import dotenv from 'dotenv'
 import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import { connectDB } from './utils/db.connect'
+import { connectDB } from './database/db.connect'
 import authRoutes from './routes/auth.routes'
 import userRoutes from './routes/user.routes'
 import eventRoutes from './routes/event.routes'
 import { limiter } from './middlewares/rateLimit'
+import { PORT } from './config/env'
 
-dotenv.config()
 const app = express()
 
 app.use(
@@ -19,7 +18,7 @@ app.use(
 )
 app.use(helmet())
 app.use(limiter)
-app.use(express.json())
+app.use(express.json({ limit: '2mb' }))
 app.use(cookieParser())
 
 connectDB()
@@ -32,10 +31,12 @@ app.get('/', (_req, res) => {
 	res.send('api is running...')
 })
 
-const PORT = process.env.PORT
-
-app.listen(PORT, () =>
+const server = app.listen(PORT, () =>
 	console.log(`server is running on port http://localhost:${PORT}....`)
 )
+
+process.on('SIGTERM', () => {
+	server.close(() => console.log('process terminated'))
+})
 
 export default app

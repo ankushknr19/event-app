@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { CategoryModel } from '../../models/category.model'
+import { CategoryModel } from '../../database/models/category.model'
 
 // @desc get all category data
 // GET api/event/category

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { UserModel } from '../../models/user.model'
+import { UserModel } from '../../database/models/user.model'
 
 export const userLogoutController = async (_req: Request, res: Response) => {
 	try {

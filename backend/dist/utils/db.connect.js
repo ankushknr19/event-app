@@ -5,16 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectDB = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const { mongoCompassURI } = process.env;
+const env_1 = require("../config/env");
 function connectDB() {
     try {
-        const dbURI = mongoCompassURI || '';
+        const dbURI = env_1.MONGO_COMPASS_URI || '';
         mongoose_1.default.connect(dbURI, () => console.log('Database connected successfully!'));
     }
     catch (error) {
         console.log('error during inital connection to mongodb database');
+        process.exit(1);
     }
     mongoose_1.default.set('debug', true);
 }

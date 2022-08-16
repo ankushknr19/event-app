@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRegisterController = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const user_model_1 = require("../../models/user.model");
+const env_1 = require("../../config/env");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const lodash_1 = __importDefault(require("lodash"));
 dotenv_1.default.config();
@@ -25,7 +26,7 @@ const userRegisterController = (req, res) => __awaiter(void 0, void 0, void 0, f
         if (checkDB) {
             throw new Error('email already exists');
         }
-        const saltRound = parseInt(process.env.SALT_ROUND);
+        const saltRound = parseInt(env_1.SALT_ROUND);
         const salt = yield bcrypt_1.default.genSalt(saltRound);
         const hashedPassword = bcrypt_1.default.hashSync(password, salt);
         const newUser = yield user_model_1.UserModel.create({

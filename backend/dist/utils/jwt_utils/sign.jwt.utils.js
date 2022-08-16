@@ -4,13 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signJwtRefreshToken = exports.signJwtAccessToken = void 0;
-const dotenv_1 = __importDefault(require("dotenv"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const uuid_1 = require("uuid");
-dotenv_1.default.config();
+const env_1 = require("../../config/env");
 const signJwtAccessToken = (res, payload) => {
-    const accessToken = jsonwebtoken_1.default.sign(payload, process.env.accessTokenSecretKey, {
-        expiresIn: process.env.accessTokenTimeToLive,
+    const accessToken = jsonwebtoken_1.default.sign(payload, env_1.ACCESS_TOKEN_SECRET_KEY, {
+        expiresIn: env_1.ACCESS_TOKEN_TIME_TO_LIVE,
     });
     res.cookie('accessToken', accessToken, {
         path: '/',
@@ -25,8 +24,8 @@ const signJwtRefreshToken = (res, userId) => {
     const refreshToken = jsonwebtoken_1.default.sign({
         id: refreshTokenId,
         userId,
-    }, process.env.refreshTokenSecretKey, {
-        expiresIn: process.env.refreshTokenTimeToLive,
+    }, env_1.REFRESH_TOKEN_SECRET_KEY, {
+        expiresIn: env_1.REFRESH_TOKEN_TIME_TO_LIVE,
     });
     res.cookie('refreshToken', refreshToken, {
         path: '/',

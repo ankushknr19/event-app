@@ -1,13 +1,10 @@
-import dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import { UserModel } from '../../models/user.model'
+import { UserModel } from '../../database/models/user.model'
 import bcrypt from 'bcrypt'
 import {
 	signJwtAccessToken,
 	signJwtRefreshToken,
-} from '../../utils/jwt_utils/sign.jwt.utils'
-
-dotenv.config()
+} from './jwt_utils/sign.jwt.utils'
 
 export const userLoginController = async (req: Request, res: Response) => {
 	try {

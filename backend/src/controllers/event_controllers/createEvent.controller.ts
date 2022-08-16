@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { EventModel } from '../../models/event.model'
+import { EventModel } from '../../database/models/event.model'
 
 //@desc POST create a new event by organizer
 //@route /api/events

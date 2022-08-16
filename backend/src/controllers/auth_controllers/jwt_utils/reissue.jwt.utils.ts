@@ -1,6 +1,6 @@
 import { Response } from 'express'
 import { get } from 'lodash'
-import { UserModel } from '../../models/user.model'
+import { UserModel } from '../../../database/models/user.model'
 import { signJwtAccessToken, signJwtRefreshToken } from './sign.jwt.utils'
 import { verifyRefreshToken } from './verify.jwt.utils'
 

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { EventModel } from '../../models/event.model'
+import { EventModel } from '../../database/models/event.model'
 
 export async function getAllEventsController(_req: Request, res: Response) {
 	try {

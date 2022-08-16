@@ -1,7 +1,7 @@
 import { get } from 'lodash' //makes little bit safe to access property that we dont know if exists or not
 import { Request, Response, NextFunction } from 'express'
-import { verifyAccessToken } from '../utils/jwt_utils/verify.jwt.utils'
-import { reissueTokens } from '../utils/jwt_utils/reissue.jwt.utils'
+import { verifyAccessToken } from '../controllers/auth_controllers/jwt_utils/verify.jwt.utils'
+import { reissueTokens } from '../controllers/auth_controllers/jwt_utils/reissue.jwt.utils'
 
 export const requireUser = async (
 	req: Request,

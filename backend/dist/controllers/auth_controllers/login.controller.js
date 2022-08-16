@@ -13,11 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userLoginController = void 0;
-const dotenv_1 = __importDefault(require("dotenv"));
 const user_model_1 = require("../../models/user.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const sign_jwt_utils_1 = require("../../utils/jwt_utils/sign.jwt.utils");
-dotenv_1.default.config();
 const userLoginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
