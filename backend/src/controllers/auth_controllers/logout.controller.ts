@@ -1,12 +1,19 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
+import createHttpError from 'http-errors'
 import { UserModel } from '../../database/models/user.model'
 
-export const userLogoutController = async (_req: Request, res: Response) => {
+export const userLogoutController = async (
+	_req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	try {
 		const userId = res.locals.user.userId
+		if (!userId) throw new createHttpError.Unauthorized()
+
 		const user = await UserModel.findById(userId)
 
-		if (!user) throw new Error()
+		if (!user) throw new createHttpError.Unauthorized()
 
 		await UserModel.updateOne(
 			{ _id: userId },
@@ -19,6 +26,6 @@ export const userLogoutController = async (_req: Request, res: Response) => {
 
 		res.status(200).send('logged out successfully')
 	} catch (error: any) {
-		res.status(404).send('logout failed')
+		next(error)
 	}
 }

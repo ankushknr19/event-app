@@ -13,32 +13,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userLoginController = void 0;
-const user_model_1 = require("../../models/user.model");
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const sign_jwt_utils_1 = require("../../utils/jwt_utils/sign.jwt.utils");
-const userLoginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const user_model_1 = require("../../database/models/user.model");
+const sign_jwt_utils_1 = require("./jwt_utils/sign.jwt.utils");
+const login_schema_1 = require("../../database/schemas/auth_schemas/login.schema");
+const http_errors_1 = __importDefault(require("http-errors"));
+const userLoginController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { email, password } = req.body;
+        const result = yield login_schema_1.userLoginSchema.validateAsync(req.body);
+        const { email, password } = result;
         const user = yield user_model_1.UserModel.findOne({ email });
         if (!user) {
-            throw new Error('invalid email');
+            throw new http_errors_1.default.BadRequest('User not registered');
         }
-        const isValidPassword = yield bcrypt_1.default.compare(password, user.password);
-        if (!isValidPassword) {
-            throw new Error('invalid password');
+        const isMatch = yield user.comparePassword(password);
+        if (!isMatch) {
+            throw new http_errors_1.default.Unauthorized('Invalid email/password');
         }
-        (0, sign_jwt_utils_1.signJwtAccessToken)(res, { userId: user._id, user_type: user.user_type });
-        const { refreshTokenId } = (0, sign_jwt_utils_1.signJwtRefreshToken)(res, user._id);
+        (0, sign_jwt_utils_1.signJwtAccessToken)(res, { userId: user._id, role: user.role });
+        const { refreshTokenId } = yield (0, sign_jwt_utils_1.signJwtRefreshToken)(res, user._id);
         user.refreshTokenId = refreshTokenId;
         yield user.save();
         res.status(200).send({
             message: 'Sucessfully logged in',
             user: user._id,
-            user_type: user.user_type,
+            role: user.role,
         });
     }
     catch (error) {
-        res.status(404).send(error.message);
+        if (error.isJoi) {
+            return next(new http_errors_1.default.BadRequest('Invalid email/password'));
+        }
+        next(error);
     }
 });
 exports.userLoginController = userLoginController;

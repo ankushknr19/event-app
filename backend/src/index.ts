@@ -2,24 +2,29 @@ import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import { connectDB } from './database/db.connect'
+import { connectDB } from './database/utils/db.connect'
 import authRoutes from './routes/auth.routes'
 import userRoutes from './routes/user.routes'
 import eventRoutes from './routes/event.routes'
 import { limiter } from './middlewares/rateLimit'
 import { PORT } from './config/env'
+import morganLogger from './middlewares/morganLogger'
+import logger from './middlewares/winstonLogger'
+import { errorHandler } from './middlewares/errorHandler'
+import createHttpError from 'http-errors'
 
 const app = express()
 
 app.use(
 	cors({
-		origin: 'http://127.0.0.1:5173',
+		origin: ['http://127.0.0.1:5173'],
 	})
 )
 app.use(helmet())
 app.use(limiter)
 app.use(express.json({ limit: '2mb' }))
 app.use(cookieParser())
+app.use(morganLogger)
 
 connectDB()
 
@@ -31,12 +36,19 @@ app.get('/', (_req, res) => {
 	res.send('api is running...')
 })
 
+// if route doesnot exist
+app.use((_req, _res, next) => {
+	next(new createHttpError.NotFound())
+})
+
+app.use(errorHandler)
+
 const server = app.listen(PORT, () =>
-	console.log(`server is running on port http://localhost:${PORT}....`)
+	logger.info(`server is running on port http://localhost:${PORT}....`)
 )
 
 process.on('SIGTERM', () => {
-	server.close(() => console.log('process terminated'))
+	server.close(() => logger.warn('process terminated'))
 })
 
 export default app

@@ -7,7 +7,7 @@ import {
 } from '../../../config/env'
 
 //verify jwt access token
-export const verifyAccessToken = (token: string) => {
+export const verifyAccessToken = async (token: string) => {
 	try {
 		//decode token
 		const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET_KEY!)

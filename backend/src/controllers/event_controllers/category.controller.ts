@@ -1,10 +1,15 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
+import createHttpError from 'http-errors'
 import { CategoryModel } from '../../database/models/category.model'
 
-// @desc get all category data
+// @desc create an eventv category
 // GET api/event/category
 // ACCESS private/admin
-export async function createCategory(req: Request, res: Response) {
+export async function createCategory(
+	req: Request,
+	res: Response,
+	next: NextFunction
+) {
 	try {
 		const { name, types } = req.body
 
@@ -12,20 +17,24 @@ export async function createCategory(req: Request, res: Response) {
 
 		res.status(201).send(newCategory)
 	} catch (error: any) {
-		res.status(404).send(error.message)
+		next(error)
 	}
 }
 
 // @desc get all category data
 // GET api/event/category
 // ACCESS public
-export async function getAllCategory(_req: Request, res: Response) {
+export async function getAllCategory(
+	_req: Request,
+	res: Response,
+	next: NextFunction
+) {
 	try {
 		const allCategory = await CategoryModel.find()
 
-		if (!allCategory) throw new Error('no category found')
+		if (!allCategory) throw new createHttpError.NotFound()
 		res.status(201).send(allCategory)
 	} catch (error: any) {
-		res.status(404).send(error.message)
+		next(error)
 	}
 }

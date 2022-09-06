@@ -1,12 +1,17 @@
 import { Request, Response } from 'express'
 import { EventModel } from '../../database/models/event.model'
+import { createEventSchema } from '../../database/schemas/event.schema'
 
 //@desc POST create a new event by organizer
 //@route /api/events
 //@access Private
 
+// !! ticket type and ticket price can be sent as an object from frontend !!
+
 export async function createEventController(req: Request, res: Response) {
 	try {
+		//validate incoming data
+		const result = await createEventSchema.validateAsync(req.body)
 		const {
 			name,
 			organizer,
@@ -23,7 +28,7 @@ export async function createEventController(req: Request, res: Response) {
 			ticket_price,
 			image,
 			contact,
-		} = req.body
+		} = result
 
 		const user = res.locals.user.userId
 

@@ -1,5 +1,5 @@
 import express from 'express'
-import { requireUser } from '../middlewares/requireUser'
+import { requireUser } from '../controllers/auth_controllers/jwt_utils/requireUser'
 
 const router = express.Router()
 

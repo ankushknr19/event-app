@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.requireUser = void 0;
 const lodash_1 = require("lodash");
-const verify_jwt_utils_1 = require("../utils/jwt_utils/verify.jwt.utils");
-const reissue_jwt_utils_1 = require("../utils/jwt_utils/reissue.jwt.utils");
+const verify_jwt_utils_1 = require("../controllers/auth_controllers/jwt_utils/verify.jwt.utils");
+const reissue_jwt_utils_1 = require("../controllers/auth_controllers/jwt_utils/reissue.jwt.utils");
 const requireUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const cookies = (0, lodash_1.get)(req, 'cookies');

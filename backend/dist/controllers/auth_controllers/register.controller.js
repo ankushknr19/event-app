@@ -14,30 +14,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRegisterController = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
-const user_model_1 = require("../../models/user.model");
-const env_1 = require("../../config/env");
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const user_model_1 = require("../../database/models/user.model");
 const lodash_1 = __importDefault(require("lodash"));
+const register_schema_1 = require("../../database/schemas/auth_schemas/register.schema");
+const http_errors_1 = __importDefault(require("http-errors"));
 dotenv_1.default.config();
-const userRegisterController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const userRegisterController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { email, password, user_type } = req.body;
+        const result = yield register_schema_1.userRegisterSchema.validateAsync(req.body);
+        const { email, password, role, } = result;
         const checkDB = yield user_model_1.UserModel.findOne({ email }).select('email');
         if (checkDB) {
-            throw new Error('email already exists');
+            throw new Error('User already exists');
         }
-        const saltRound = parseInt(env_1.SALT_ROUND);
-        const salt = yield bcrypt_1.default.genSalt(saltRound);
-        const hashedPassword = bcrypt_1.default.hashSync(password, salt);
         const newUser = yield user_model_1.UserModel.create({
             email,
-            password: hashedPassword,
-            user_type,
+            password,
+            role,
         });
         res.status(201).json(lodash_1.default.omit(newUser.toJSON(), 'password'));
     }
     catch (error) {
-        res.status(404).send(error.message);
+        if (error.isJoi) {
+            error = new http_errors_1.default.UnprocessableEntity('Invalid input');
+        }
+        next(error);
     }
 });
 exports.userRegisterController = userRegisterController;
