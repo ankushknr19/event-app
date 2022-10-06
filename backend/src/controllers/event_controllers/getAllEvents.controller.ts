@@ -8,7 +8,7 @@ export async function getAllEventsController(
 	next: NextFunction
 ) {
 	try {
-		const allEvents = await EventModel.find()
+		const allEvents = await EventModel.find().lean()
 
 		if (allEvents.length === 0) throw new createHttpError.NotFound()
 

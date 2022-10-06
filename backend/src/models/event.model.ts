@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 
-const eventSchema = new Schema(
+const EventSchema = new Schema(
 	{
 		user: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
 		name: { type: String, required: true },
@@ -26,4 +26,4 @@ const eventSchema = new Schema(
 	{ timestamps: true }
 )
 
-export const EventModel = mongoose.model('Event', eventSchema)
+export const EventModel = mongoose.model('Event', EventSchema)

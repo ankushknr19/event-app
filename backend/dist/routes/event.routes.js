@@ -8,7 +8,7 @@ const category_controller_1 = require("../controllers/event_controllers/category
 const router = (0, express_1.Router)();
 router
     .route('/')
-    .get(getAllEvents_controller_1.getAllEventsController)
+    .get(requireUser_1.requireUser, getAllEvents_controller_1.getAllEventsController)
     .post(requireUser_1.requireUser, createEvent_controller_1.createEventController);
 router
     .route('/categories')

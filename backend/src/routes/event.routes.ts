@@ -11,7 +11,7 @@ const router = Router()
 
 router
 	.route('/')
-	.get(getAllEventsController)
+	.get(requireUser, getAllEventsController)
 	.post(requireUser, createEventController)
 
 router

@@ -885,6 +885,12 @@ packages:
       '@types/node': 18.0.3
     dev: true
 
+  /@types/morgan/1.9.3:
+    resolution: {integrity: sha512-BiLcfVqGBZCyNCnCH3F4o2GmDLrpy0HeBVnNlyZG4fo88ZiE9SoiBe3C+2ezuwbjlEyT+PDZ17//TAlRxAn75Q==}
+    dependencies:
+      '@types/node': 18.0.3
+    dev: true
+
   /@types/node/18.0.3:
     resolution: {integrity: sha512-HzNRZtp4eepNitP+BD6k2L6DROIDG4Q0fm4x+dwfsr6LGmROENnok75VGw40628xf+iR24WeMFcHuuBDUAzzsQ==}
 

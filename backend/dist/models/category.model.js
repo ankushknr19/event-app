@@ -25,10 +25,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoryModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const categorySchema = new mongoose_1.Schema({
+const CategorySchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     types: [String],
     isActive: { type: Boolean, default: true },
 }, { timestamps: true });
-exports.CategoryModel = mongoose_1.default.model('Category', categorySchema);
+exports.CategoryModel = mongoose_1.default.model('Category', CategorySchema);
 //# sourceMappingURL=category.model.js.map

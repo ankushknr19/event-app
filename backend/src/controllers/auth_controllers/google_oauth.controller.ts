@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import createHttpError from 'http-errors'
-// import { CLIENT_ORIGIN } from '../../config/env'
+import { CLIENT_ORIGIN } from '../../config/env'
 import { v4 as uuidv4 } from 'uuid'
 import { UserModel } from '../../models/user.model'
 import { getGoogleOAuthTokens } from '../../utils/google_oauth_utils/get.tokens'
@@ -45,7 +45,7 @@ export const googleOAuthController = async (
 		)
 
 		//sign access token
-		await signAccessToken(res, {
+		signAccessToken(res, {
 			userId: user._id,
 			role: user.role,
 		})
@@ -54,14 +54,7 @@ export const googleOAuthController = async (
 		await signRefreshToken(res, user._id)
 
 		//redirect back to the client
-		// res.redirect(CLIENT_ORIGIN)
-
-		res.status(200).send({
-			message: 'Sucessfully logged in',
-			userId: user._id,
-			email: user.email,
-			role: user.role,
-		})
+		res.redirect(CLIENT_ORIGIN)
 	} catch (error: any) {
 		next(error)
 	}

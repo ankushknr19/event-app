@@ -28,8 +28,8 @@ const userRegisterController = (req, res, next) => __awaiter(void 0, void 0, voi
             throw new http_errors_1.default.Conflict('email already exists');
         }
         const saltRound = parseInt(env_1.SALT_ROUND);
-        const salt = yield bcrypt_1.default.genSalt(saltRound);
-        const hashedPassword = bcrypt_1.default.hashSync(password, salt);
+        const salt = yield bcrypt_1.default.genSalt(saltRound | 10);
+        const hashedPassword = yield bcrypt_1.default.hash(password, salt);
         const newUser = yield user_model_1.UserModel.create({
             email,
             password: hashedPassword,

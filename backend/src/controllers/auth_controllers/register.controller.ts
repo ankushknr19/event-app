@@ -7,7 +7,7 @@ import { SALT_ROUND } from '../../config/env'
 import bcrypt from 'bcrypt'
 
 // @desc register a new user
-// @route POST /api/users
+// @route POST /api/auth/register
 // @access public
 
 export const userRegisterController = async (
@@ -29,8 +29,8 @@ export const userRegisterController = async (
 
 		//encrypt the password
 		const saltRound = parseInt(SALT_ROUND!)
-		const salt = await bcrypt.genSalt(saltRound)
-		const hashedPassword = bcrypt.hashSync(password, salt)
+		const salt: string = await bcrypt.genSalt(saltRound | 10)
+		const hashedPassword = await bcrypt.hash(password, salt)
 
 		//save in database
 		const newUser = await UserModel.create({

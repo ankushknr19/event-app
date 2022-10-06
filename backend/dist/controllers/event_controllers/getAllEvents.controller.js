@@ -18,7 +18,7 @@ const event_model_1 = require("../../models/event.model");
 function getAllEventsController(_req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const allEvents = yield event_model_1.EventModel.find();
+            const allEvents = yield event_model_1.EventModel.find().lean();
             if (allEvents.length === 0)
                 throw new http_errors_1.default.NotFound();
             res.status(200).send(allEvents);
