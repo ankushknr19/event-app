@@ -6,6 +6,22 @@ import { usePasswordVisibilityToggle } from '../../Hooks/PasswordToggle'
 import * as Yup from 'yup'
 import axios from 'axios'
 
+function getGoogleUrl() {
+	const queryStringValues = {
+		redirect_uri: 'https://localhost:5000/api/auth/google',
+		prompt: 'consent',
+		response_type: 'code',
+		client_id:
+			'677813309461-1rlni63momc208vcg2ig3m0ma94or6rc.apps.googleusercontent.com',
+		scope: 'https://www.googleapis.com/auth/userinfo.email',
+		access_type: 'offline',
+	}
+
+	const queryString = new URLSearchParams(queryStringValues)
+	const url = `https://accounts.google.com/o/oauth2/v2/auth?${queryString.toString()}`
+	return url
+}
+
 function Login() {
 	const [login, setLogin] = useState({})
 	const [PasswordVisibilityIcon, PasswordInputType] =
@@ -30,7 +46,7 @@ function Login() {
 				try {
 					const response = await axios({
 						method: 'post',
-						url: 'http://localhost:5000/api/auth/login',
+						url: 'https://localhost:5000/api/auth/login',
 						data: JSON.stringify(values),
 						headers: {
 							'Content-Type': 'application/json',
@@ -41,7 +57,6 @@ function Login() {
 				} catch (error: any) {
 					console.log(error.message)
 				}
-				// alert(JSON.stringify(values, null, 2))
 				setSubmitting(false)
 			}}
 		>
@@ -83,7 +98,13 @@ function Login() {
 					<button type="submit" className="btn btn-primary">
 						Login
 					</button>
+					<p className="divider">or</p>
 				</Form>
+				<a href={getGoogleUrl()}>
+					<button className="btn btn-secondary">
+						Sign in with google
+					</button>
+				</a>
 			</section>
 		</Formik>
 	)

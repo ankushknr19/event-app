@@ -50,3 +50,8 @@
 	color: rgb(222, 27, 27);
 	margin-bottom: 6px;
 }
+
+.divider {
+	text-align: center;
+	margin: 0.5em;
+}

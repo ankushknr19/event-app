@@ -1,12 +1,18 @@
-import { Request, Response } from 'express'
-import { EventModel } from '../../database/models/event.model'
+import { EventModel } from '../../models/event.model'
+import { NextFunction, Request, Response } from 'express'
+import { createEventSchema } from '../../schemas/event.schema'
 
 //@desc POST create a new event by organizer
 //@route /api/events
 //@access Private
 
-export async function createEventController(req: Request, res: Response) {
+export async function createEventController(
+	req: Request,
+	res: Response,
+	next: NextFunction
+) {
 	try {
+		const result = await createEventSchema.validateAsync(req.body)
 		const {
 			name,
 			organizer,
@@ -23,7 +29,7 @@ export async function createEventController(req: Request, res: Response) {
 			ticket_price,
 			image,
 			contact,
-		} = req.body
+		} = result
 
 		const user = res.locals.user.userId
 
@@ -50,6 +56,6 @@ export async function createEventController(req: Request, res: Response) {
 
 		res.status(201).send(newEvent)
 	} catch (error: any) {
-		res.status(404).send(error.message)
+		next(error)
 	}
 }

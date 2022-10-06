@@ -1,8 +1,12 @@
 import { dividerClasses } from '@mui/material'
+import axios from 'axios'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { useState } from 'react'
 import * as Yup from 'yup'
 
 function Register() {
+	const [register, setRegister] = useState({})
+
 	return (
 		<Formik
 			initialValues={{
@@ -11,18 +15,29 @@ function Register() {
 			}}
 			validationSchema={Yup.object({
 				email: Yup.string()
-					.email('Incorrect email address')
+					.email('Incorrect email address.')
 					.required('Email is required.'),
 				password: Yup.string()
 					.min(6, 'Password must be at least 6 characters long.')
 					.max(30, 'Password must be less than 30 characters long.')
 					.required('Password is required.'),
 			})}
-			onSubmit={(values, { setSubmitting }) => {
-				setTimeout(() => {
-					alert(JSON.stringify(values, null, 2))
-					setSubmitting(false)
-				}, 400)
+			onSubmit={async (values, { setSubmitting }) => {
+				try {
+					const response = await axios({
+						method: 'post',
+						url: 'https://localhost:5000/api/auth/register',
+						data: JSON.stringify(values),
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					})
+					setRegister(response.data)
+					console.log(response.data)
+				} catch (error: any) {
+					console.log(error.message)
+				}
+				setSubmitting(false)
 			}}
 		>
 			<section className="form-card">

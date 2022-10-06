@@ -1,50 +1,60 @@
-import { get } from 'lodash' //makes little bit safe to access property that we dont know if exists or not
-import { Request, Response, NextFunction } from 'express'
-import { verifyAccessToken } from '../controllers/auth_controllers/jwt_utils/verify.jwt.utils'
-import { reissueTokens } from '../controllers/auth_controllers/jwt_utils/reissue.jwt.utils'
+//used in routes where user is required
 
-export const requireUser = async (
-	req: Request,
+import { Request, Response, NextFunction } from 'express'
+import createHttpError from 'http-errors'
+import { UserModel } from '../models/user.model'
+
+export const requireUser = (
+	_req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
 	try {
-		//get access token from cookies
-		const cookies = get(req, 'cookies')
-		const accessToken = cookies.accessToken
-		const refreshToken = cookies.refreshToken
+		const user = res.locals.user
+		//in deserialzeUser, we put the user in the response object because they had a valid token
 
-		//if the cookie has expired and/or there is no token in cookie
-		if (!accessToken) throw new Error('unauathorized, invalid token')
+		if (!user) throw new createHttpError.Unauthorized()
 
-		//verify access token
-		const { valid, decoded, expired } = verifyAccessToken(accessToken)
-
-		//put user in res.locals
-		if (valid && decoded && !expired) {
-			res.locals.user = decoded //decoded has data passed when signing jwt i.e. userId
-			return next()
-		}
-
-		//refreshing expired access token
-		if (expired && refreshToken) {
-			//reissue tokens
-			const { newAccessToken } = await reissueTokens(res, refreshToken)
-
-			// console.log(newAccessToken)
-
-			if (!newAccessToken) throw new Error('reissue failed')
-			//verify new access token
-			const { valid, decoded, expired } = verifyAccessToken(newAccessToken)
-
-			//put user in res.locals
-			if (valid && decoded && !expired) {
-				res.locals.user = decoded //decoded has data passed when signing jwt i.e. userId
-				return next()
-			}
-		}
-		next()
+		return next()
 	} catch (error: any) {
-		res.status(401).send(error.message)
+		next(error)
+	}
+}
+
+//throw error if user is logged in and tries to visit register page
+export const checkLoggedInUser = (
+	_req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const user = res.locals.user
+
+		if (user) throw new createHttpError.Unauthorized()
+
+		return next()
+	} catch (error: any) {
+		next(error)
+	}
+}
+
+//require admin role
+export const requireAdmin = async (
+	_req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const user = res.locals.user
+		console.log(user)
+
+		if (!user) throw new createHttpError.Unauthorized()
+
+		const DBuser = await UserModel.findById(user?.userId).select('-password')
+		if (DBuser?.role !== 'admin') throw new createHttpError.Unauthorized()
+
+		return next()
+	} catch (error: any) {
+		next(error)
 	}
 }

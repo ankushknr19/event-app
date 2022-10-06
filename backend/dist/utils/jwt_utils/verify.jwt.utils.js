@@ -17,7 +17,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const lodash_1 = require("lodash");
 const user_model_1 = require("../../models/user.model");
 const env_1 = require("../../config/env");
-const verifyAccessToken = (token) => {
+const verifyAccessToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const decoded = jsonwebtoken_1.default.verify(token, env_1.ACCESS_TOKEN_SECRET_KEY);
         return {
@@ -33,7 +33,7 @@ const verifyAccessToken = (token) => {
             decoded: null,
         };
     }
-};
+});
 exports.verifyAccessToken = verifyAccessToken;
 const verifyRefreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     try {

@@ -12,14 +12,12 @@ function Home() {
 			try {
 				const response = await axios({
 					method: 'get',
-					url: 'http://localhost:5000/api/events',
+					baseURL: 'https://localhost:5000/api',
+					url: 'events',
 					headers: {
 						'Content-Type': 'application/json',
 					},
 				})
-				// const response = await axios.get(ALL_EVENTS_URL, {
-				// 	headers: { 'Content-Type': 'application/json' },
-				// })
 
 				setEvents(response.data)
 			} catch (error: any) {

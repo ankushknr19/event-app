@@ -8,38 +8,51 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.requireUser = void 0;
-const lodash_1 = require("lodash");
-const verify_jwt_utils_1 = require("../utils/jwt_utils/verify.jwt.utils");
-const reissue_jwt_utils_1 = require("../utils/jwt_utils/reissue.jwt.utils");
-const requireUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.requireAdmin = exports.checkLoggedInUser = exports.requireUser = void 0;
+const http_errors_1 = __importDefault(require("http-errors"));
+const user_model_1 = require("../models/user.model");
+const requireUser = (_req, res, next) => {
     try {
-        const cookies = (0, lodash_1.get)(req, 'cookies');
-        const accessToken = cookies.accessToken;
-        const refreshToken = cookies.refreshToken;
-        if (!accessToken)
-            throw new Error('unauathorized, invalid token');
-        const { valid, decoded, expired } = (0, verify_jwt_utils_1.verifyAccessToken)(accessToken);
-        if (valid && decoded && !expired) {
-            res.locals.user = decoded;
-            return next();
-        }
-        if (expired && refreshToken) {
-            const { newAccessToken } = yield (0, reissue_jwt_utils_1.reissueTokens)(res, refreshToken);
-            if (!newAccessToken)
-                throw new Error('reissue failed');
-            const { valid, decoded, expired } = (0, verify_jwt_utils_1.verifyAccessToken)(newAccessToken);
-            if (valid && decoded && !expired) {
-                res.locals.user = decoded;
-                return next();
-            }
-        }
-        next();
+        const user = res.locals.user;
+        if (!user)
+            throw new http_errors_1.default.Unauthorized();
+        return next();
     }
     catch (error) {
-        res.status(401).send(error.message);
+        next(error);
+    }
+};
+exports.requireUser = requireUser;
+const checkLoggedInUser = (_req, res, next) => {
+    try {
+        const user = res.locals.user;
+        if (user)
+            throw new http_errors_1.default.Unauthorized();
+        return next();
+    }
+    catch (error) {
+        next(error);
+    }
+};
+exports.checkLoggedInUser = checkLoggedInUser;
+const requireAdmin = (_req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = res.locals.user;
+        console.log(user);
+        if (!user)
+            throw new http_errors_1.default.Unauthorized();
+        const DBuser = yield user_model_1.UserModel.findById(user === null || user === void 0 ? void 0 : user.userId).select('-password');
+        if ((DBuser === null || DBuser === void 0 ? void 0 : DBuser.role) !== 'admin')
+            throw new http_errors_1.default.Unauthorized();
+        return next();
+    }
+    catch (error) {
+        next(error);
     }
 });
-exports.requireUser = requireUser;
+exports.requireAdmin = requireAdmin;
 //# sourceMappingURL=requireUser.js.map

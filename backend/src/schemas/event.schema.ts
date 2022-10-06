@@ -1,52 +1,19 @@
-import { z } from 'zod'
+import Joi from 'joi'
 
-export const createEventSchema = z.object({
-	body: z.object({
-		name: z
-			.string({
-				required_error: 'Event name is required',
-			})
-			.min(3)
-			.max(60),
-		organizer: z
-			.string({
-				required_error: 'Organizer name is required',
-			})
-			.min(3)
-			.max(60),
-		category: z.string({
-			required_error: 'Event category is required',
-		}),
-		event_type: z.string({
-			required_error: 'Event type is required',
-		}),
-		venue: z
-			.string({
-				required_error: 'Venue is required',
-			})
-			.min(3)
-			.max(60),
-		location: z
-			.string({
-				required_error: 'Location is required',
-			})
-			.min(4)
-			.max(200),
-		start_date: z.string({
-			required_error: 'Start date is required',
-		}),
-		end_date: z.string({
-			required_error: 'End date is required',
-		}),
-		time: z.string().max(30).optional(),
-		description: z.string().max(2000).optional(),
-		tags: z.array(z.string()).optional(),
-		ticket_type: z.enum(['paid', 'free']),
-		ticket_price: z.number({
-			required_error: 'Ticket price is required',
-		}),
-
-		image: z.string().optional(),
-		contact: z.array(z.number()).optional(),
-	}),
+export const createEventSchema = Joi.object({
+	name: Joi.string().min(3).max(60).required(),
+	organizer: Joi.string().min(3).max(60).required(),
+	category: Joi.string().required(),
+	event_type: Joi.string().required(),
+	venue: Joi.string().min(3).max(60).required(),
+	location: Joi.string().min(4).max(200).required(),
+	start_date: Joi.string().required(),
+	end_date: Joi.string().required(),
+	time: Joi.string().max(30).optional(),
+	description: Joi.string().max(2000).allow('').optional(),
+	tags: Joi.array().items(Joi.string()).optional(),
+	ticket_type: Joi.string().valid('paid', 'free'),
+	ticket_price: Joi.number().required(),
+	image: Joi.string().allow('').optional(),
+	contact: Joi.array().items(Joi.number()).optional(),
 })

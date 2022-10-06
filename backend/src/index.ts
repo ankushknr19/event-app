@@ -1,25 +1,30 @@
-import express from 'express'
-import helmet from 'helmet'
+import fs from 'fs'
 import cors from 'cors'
-import cookieParser from 'cookie-parser'
-import { connectDB } from './database/db.connect'
-import authRoutes from './routes/auth.routes'
-import userRoutes from './routes/user.routes'
-import eventRoutes from './routes/event.routes'
-import { limiter } from './middlewares/rateLimit'
+import https from 'https'
+import helmet from 'helmet'
+import express from 'express'
 import { PORT } from './config/env'
+import cookieParser from 'cookie-parser'
+import createHttpError from 'http-errors'
+import userRoutes from './routes/user.routes'
+import authRoutes from './routes/auth.routes'
+import { connectDB } from './config/db.connect'
+import eventRoutes from './routes/event.routes'
+import logger from './middlewares/winstonLogger'
+import { limiter } from './middlewares/rateLimit'
+import morganLogger from './middlewares/morganLogger'
+import { errorHandler } from './middlewares/errorHandler'
+import { deserializeUser } from './middlewares/deserializeUser'
 
 const app = express()
 
-app.use(
-	cors({
-		origin: 'http://127.0.0.1:5173',
-	})
-)
+app.use(cors())
 app.use(helmet())
 app.use(limiter)
 app.use(express.json({ limit: '2mb' }))
 app.use(cookieParser())
+app.use(deserializeUser)
+app.use(morganLogger)
 
 connectDB()
 
@@ -31,12 +36,27 @@ app.get('/', (_req, res) => {
 	res.send('api is running...')
 })
 
-const server = app.listen(PORT, () =>
-	console.log(`server is running on port http://localhost:${PORT}....`)
-)
+// if route doesnot exist
+app.use((_req, _res, next) => {
+	next(new createHttpError.NotFound())
+})
+
+app.use(errorHandler)
+
+const server = https
+	.createServer(
+		{
+			key: fs.readFileSync('key.pem'),
+			cert: fs.readFileSync('cert.pem'),
+		},
+		app
+	)
+	.listen(PORT, () =>
+		logger.info(`server is running on port https://localhost:${PORT}....`)
+	)
 
 process.on('SIGTERM', () => {
-	server.close(() => console.log('process terminated'))
+	server.close(() => logger.warn('process terminated'))
 })
 
 export default app

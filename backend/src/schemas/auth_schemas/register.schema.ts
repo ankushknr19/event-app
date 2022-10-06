@@ -1,17 +1,7 @@
-import { z } from 'zod'
+import Joi from 'joi'
 
-export const userRegisterSchema = z.object({
-	body: z.object({
-		email: z
-			.string({
-				required_error: 'Email is required',
-			})
-			.email('Not a valid email'),
-		password: z
-			.string({
-				required_error: 'Password is required',
-			})
-			.min(6, 'Password should be of at least 6 characters'),
-		user_type: z.enum(['user', 'organizer', 'admin']),
-	}),
+export const userRegisterSchema = Joi.object({
+	email: Joi.string().email().lowercase().required(),
+	password: Joi.string().min(6).max(30).required(),
+	role: Joi.string().valid('user', 'organizer', 'admin'),
 })

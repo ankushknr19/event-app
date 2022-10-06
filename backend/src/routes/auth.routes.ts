@@ -1,21 +1,18 @@
 import express from 'express'
 import { userLoginController } from '../controllers/auth_controllers/login.controller'
-import { userLoginSchema } from '../schemas/auth_schemas/login.schema'
 import { userRegisterController } from '../controllers/auth_controllers/register.controller'
-import { userRegisterSchema } from '../schemas/auth_schemas/register.schema'
-import { validateResource } from '../middlewares/validateResource'
 import { requireUser } from '../middlewares/requireUser'
 import { userLogoutController } from '../controllers/auth_controllers/logout.controller'
+import { googleOAuthController } from '../controllers/auth_controllers/google_oauth.controller'
 
 const router = express.Router()
 
-router
-	.route('/login')
-	.post(validateResource(userLoginSchema), userLoginController)
-router
-	.route('/register')
-	.post(validateResource(userRegisterSchema), userRegisterController)
+router.post('/login', userLoginController)
 
-router.route('/logout').get(requireUser, userLogoutController)
+router.post('/register', userRegisterController)
+
+router.delete('/logout', requireUser, userLogoutController)
+
+router.get('/google', googleOAuthController)
 
 export default router
