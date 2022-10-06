@@ -30,6 +30,7 @@ const signAccessToken = (res, payload) => {
                 path: '/',
                 maxAge: 30 * 24 * 60 * 60,
                 httpOnly: true,
+                sameSite: 'lax',
             });
             resolve(accessToken);
         });
@@ -52,6 +53,7 @@ const signRefreshToken = (res, userId) => __awaiter(void 0, void 0, void 0, func
             path: '/',
             maxAge: 30 * 24 * 60 * 60,
             httpOnly: true,
+            sameSite: 'lax',
         });
         return { refreshToken, refreshTokenId };
     }

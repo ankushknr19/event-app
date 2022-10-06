@@ -33,44 +33,13 @@ export const signAccessToken = (res: Response, payload: AccessTokenPayload) => {
 					path: '/',
 					maxAge: 30 * 24 * 60 * 60,
 					httpOnly: true,
+					sameSite: 'lax',
 				})
 				resolve(accessToken)
 			}
 		)
 	})
 }
-// //sign jwt refresh token async
-// export const signRefreshToken = (res: Response, userId: Types.ObjectId) => {
-// 	return new Promise<{
-// 		refreshToken: string | undefined
-// 		refreshTokenId: string
-// 	}>((resolve, reject) => {
-// 		const refreshTokenId = uuidv4()
-
-// 		jwt.sign(
-// 			{
-// 				id: refreshTokenId,
-// 				userId,
-// 			},
-// 			REFRESH_TOKEN_SECRET_KEY,
-// 			{
-// 				expiresIn: REFRESH_TOKEN_TIME_TO_LIVE,
-// 			},
-// 			(err, refreshToken) => {
-// 				if (err) {
-// 					return reject(new createHttpError.InternalServerError())
-// 				}
-
-// 				res.cookie('refreshToken', refreshToken, {
-// 					path: '/',
-// 					maxAge: 30 * 24 * 60 * 60,
-// 					httpOnly: true,
-// 				})
-// 				resolve({ refreshToken, refreshTokenId })
-// 			}
-// 		)
-// 	})
-// }
 
 export const signRefreshToken = async (
 	res: Response,
@@ -100,6 +69,7 @@ export const signRefreshToken = async (
 			path: '/',
 			maxAge: 30 * 24 * 60 * 60,
 			httpOnly: true,
+			sameSite: 'lax',
 		})
 
 		return { refreshToken, refreshTokenId }

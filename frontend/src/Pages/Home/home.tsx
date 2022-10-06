@@ -17,6 +17,7 @@ function Home() {
 					headers: {
 						'Content-Type': 'application/json',
 					},
+					withCredentials: true,
 				})
 
 				setEvents(response.data)

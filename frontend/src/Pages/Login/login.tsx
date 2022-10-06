@@ -51,6 +51,7 @@ function Login() {
 						headers: {
 							'Content-Type': 'application/json',
 						},
+						withCredentials: true,
 					})
 					setLogin(response.data)
 					console.log(response.data)

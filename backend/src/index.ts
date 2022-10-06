@@ -3,7 +3,7 @@ import cors from 'cors'
 import https from 'https'
 import helmet from 'helmet'
 import express from 'express'
-import { PORT } from './config/env'
+import { PORT, CLIENT_ORIGIN } from './config/env'
 import cookieParser from 'cookie-parser'
 import createHttpError from 'http-errors'
 import userRoutes from './routes/user.routes'
@@ -18,7 +18,12 @@ import { deserializeUser } from './middlewares/deserializeUser'
 
 const app = express()
 
-app.use(cors())
+app.use(
+	cors({
+		origin: CLIENT_ORIGIN,
+		credentials: true,
+	})
+)
 app.use(helmet())
 app.use(limiter)
 app.use(express.json({ limit: '2mb' }))

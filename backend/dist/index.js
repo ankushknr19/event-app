@@ -21,7 +21,10 @@ const morganLogger_1 = __importDefault(require("./middlewares/morganLogger"));
 const errorHandler_1 = require("./middlewares/errorHandler");
 const deserializeUser_1 = require("./middlewares/deserializeUser");
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: env_1.CLIENT_ORIGIN,
+    credentials: true,
+}));
 app.use((0, helmet_1.default)());
 app.use(rateLimit_1.limiter);
 app.use(express_1.default.json({ limit: '2mb' }));
